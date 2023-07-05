@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RayanBourse.Domain.Entities;
 using System;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RayanBourse.Domain.Context
 {
-    public class RayanBourseContext:DbContext
+    public class RayanBourseContext: IdentityDbContext<ApplicationUser>
     {
         public RayanBourseContext(DbContextOptions<RayanBourseContext> options) : base(options)
         {
@@ -33,6 +35,7 @@ namespace RayanBourse.Domain.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasKey(x => new { x.ProduceDate,x.ManufactureEmail });
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Product> Products { get; set; }
