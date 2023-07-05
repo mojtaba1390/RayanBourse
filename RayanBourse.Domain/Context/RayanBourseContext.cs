@@ -25,6 +25,14 @@ namespace RayanBourse.Domain.Context
 
             var connectionString = configuration.GetConnectionString("RayanBourseConnection");
             optionsBuilder.UseSqlServer(connectionString);
+
+            
+        }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().HasKey(x => new { x.ProduceDate,x.ManufactureEmail });
         }
 
         public DbSet<Product> Products { get; set; }
