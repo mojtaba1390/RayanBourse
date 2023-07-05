@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RayanBourse.Application\RayanBourse.Application.csproj" />
     <ProjectReference Include="..\RayanBourse.Domain\RayanBourse.Domain.csproj" />
   </ItemGroup>
 
