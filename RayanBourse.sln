@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayanBourse", "RayanBourse\RayanBourse.csproj", "{D957C4AA-F6B6-4A29-BADF-6C88FB0B1570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse", "RayanBourse\RayanBourse.csproj", "{D957C4AA-F6B6-4A29-BADF-6C88FB0B1570}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse.Application", "RayanBourse.Application\RayanBourse.Application.csproj", "{2E52FA38-1D65-4B31-BF8F-16E620495911}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse.Infrastructure", "RayanBourse.Infrastructure\RayanBourse.Infrastructure.csproj", "{25223C46-1336-4296-850E-19753C56D567}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse.Domain", "RayanBourse.Domain\RayanBourse.Domain.csproj", "{FB76B0C0-D869-4545-A382-54780025EE02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayanBourse.Tests", "RayanBourse.Tests\RayanBourse.Tests.csproj", "{81CA6186-727D-4C13-879B-89C92F8C66A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{D957C4AA-F6B6-4A29-BADF-6C88FB0B1570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D957C4AA-F6B6-4A29-BADF-6C88FB0B1570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D957C4AA-F6B6-4A29-BADF-6C88FB0B1570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E52FA38-1D65-4B31-BF8F-16E620495911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E52FA38-1D65-4B31-BF8F-16E620495911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E52FA38-1D65-4B31-BF8F-16E620495911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E52FA38-1D65-4B31-BF8F-16E620495911}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25223C46-1336-4296-850E-19753C56D567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25223C46-1336-4296-850E-19753C56D567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25223C46-1336-4296-850E-19753C56D567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25223C46-1336-4296-850E-19753C56D567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB76B0C0-D869-4545-A382-54780025EE02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB76B0C0-D869-4545-A382-54780025EE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB76B0C0-D869-4545-A382-54780025EE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB76B0C0-D869-4545-A382-54780025EE02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
