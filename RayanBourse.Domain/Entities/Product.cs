@@ -40,5 +40,10 @@ namespace RayanBourse.Domain.Entities
 
         [Required]
         public EnumYesNo IsAvailable { get; set; }
+
+        public string UserId { get; set; }
+
+        public ApplicationUser User { get; set; }
+
     }
 }

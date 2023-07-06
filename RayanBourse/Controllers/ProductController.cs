@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RayanBourse.Application.Features.Product.Commands;
 using RayanBourse.Application.Features.Product.Queries;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Models;
+using System.Security.Claims;
 
 namespace RayanBourse.Controllers
 {
@@ -13,14 +16,16 @@ namespace RayanBourse.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-
+        private readonly string userId;
         public ProductController(IMediator mediator,IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
+
+
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -34,8 +39,8 @@ namespace RayanBourse.Controllers
             return Ok(productModelList);
         }
 
-        [HttpPost]
-        [Route("Get/{manufactorEmail}")]
+        [HttpGet]
+        [Route("GetByManufactorEmail/{manufactorEmail}")]
         public async Task<IActionResult> GetByManufactorEmail(string manufactorEmail)
         {
             var productModelList = new List<ProductModel>();
@@ -50,6 +55,39 @@ namespace RayanBourse.Controllers
 
 
             return Ok(productModelList);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("Add")]
+        public async Task<IActionResult> Add([FromBody] ProductModel model)
+        {
+            var userId = HttpContext.User.FindFirstValue("UserId");
+
+            try
+            {
+                await _mediator.Send(new AddProductCommand()
+                {
+                    Name = model.Name,
+                    ManufactureEmail = model.ManufactureEmail,
+                    ProduceDate = model.ProduceDate,
+                    ManufacturePhone = model.ManufacturePhone,
+                    IsAvailable = model.IsAvailable,
+                    UserId = userId
+                });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+
+
+
+
+            return Ok();
         }
     }
 }

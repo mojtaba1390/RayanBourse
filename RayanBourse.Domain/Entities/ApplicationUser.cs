@@ -4,5 +4,7 @@ namespace RayanBourse.Domain.Entities
 {
     public class ApplicationUser: IdentityUser
     {
+        public ICollection<Product> Products { get; set; }
+
     }
 }

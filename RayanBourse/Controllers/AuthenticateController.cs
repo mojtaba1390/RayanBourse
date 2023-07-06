@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -56,12 +57,13 @@ namespace RayanBourse.Controllers
         {
             try
             {
-                var token = await _mediator.Send(new LoginQuery() { Username = model.Username, Password = model.Password });
+                var result = await _mediator.Send(new LoginQuery() { Username = model.Username, Password = model.Password });
+                await HttpContext.SignInAsync(result.ClaimsPrincipal, result.AuthenticationProperties);
 
                 return Ok(new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    token = new JwtSecurityTokenHandler().WriteToken(result.JwtSecurityToken),
+                    expiration = result.JwtSecurityToken.ValidTo
                 });
 
             }

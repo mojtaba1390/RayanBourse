@@ -16,7 +16,7 @@ namespace RayanBourse.Application.Features.Product.Commands
         public string ManufactureEmail { get; set; }
         public DateTime ProduceDate { get; set; }
         public EnumYesNo IsAvailable { get; set; }
-
+        public string UserId { get; set; }
 
         public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Domain.Entities.Product>
         {
@@ -36,7 +36,9 @@ namespace RayanBourse.Application.Features.Product.Commands
                         ManufactureEmail = request.ManufactureEmail,
                         ManufacturePhone = request.ManufacturePhone,
                         ProduceDate = request.ProduceDate,
-                        IsAvailable = request.IsAvailable
+                        IsAvailable = request.IsAvailable,
+                        UserId=request.UserId
+
                     };
                     _productService.Save(product);
                     return product;
