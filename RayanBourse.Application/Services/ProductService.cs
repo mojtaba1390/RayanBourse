@@ -47,12 +47,13 @@ namespace RayanBourse.Application.Services
 
 
 
-        public void Save(Product entity)
+        public async Task<Product> Save(Product entity)
         {
             Product? product = GetEntityByManufactorEmailAndProductData(entity);
 
             Validate(databaseProduct: product,newProduct:entity, EntityState.Added);
-            _unitOfWork.ProductRepository.Save(entity);
+            await _unitOfWork.ProductRepository.Save(entity);
+            return entity;
         }
 
         public void Update(Product entity)

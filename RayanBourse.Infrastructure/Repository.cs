@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,20 +35,20 @@ namespace RayanBourse.Infrastructure
             return _dbContext.Set<TEntity>().ToList();
         }
 
-        public void Save(TEntity entity)
+        public async Task<TEntity> Save(TEntity entity)
         {
             try
             {
                  _dbContext.Set<TEntity>().Add(entity);               
-                  _dbContext.SaveChanges();
+                 await _dbContext.SaveChangesAsync();
 
 
             }
             catch (Exception e)
             {
-
                 throw e;
             }
+            return null;
         }
 
 

@@ -27,8 +27,7 @@ namespace RayanBourse.Application.Features.Product.Commands
                         UserId=request.UserId
 
                     };
-                    _productService.Save(product);
-                    return product;
+                    return await  _productService.Save(product);
                 }
                 catch (Exception ex)
                 {
