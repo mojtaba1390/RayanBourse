@@ -16,6 +16,7 @@ namespace RayanBourse.Application.Features.Product.Commands
         public string ManufactureEmail { get; set; }
         public DateTime ProduceDate { get; set; }
         public EnumYesNo IsAvailable { get; set; }
+        public string UserId { get; set; }
 
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Domain.Entities.Product>
@@ -30,19 +31,19 @@ namespace RayanBourse.Application.Features.Product.Commands
             {
                 try
                 {
-                    var entity = _productService
-                      .Find(x => x.ProduceDate == request.ProduceDate && x.ManufactureEmail.Trim() == request.ManufactureEmail).
-                      FirstOrDefault();
 
-                    if (entity == null)
-                        return default;
+                    var product = new Domain.Entities.Product()
+                    {
+                        Name = request.Name,
+                        ManufactureEmail = request.ManufactureEmail,
+                        ManufacturePhone = request.ManufacturePhone,
+                        ProduceDate = request.ProduceDate,
+                        IsAvailable = request.IsAvailable,
+                        UserId = request.UserId
 
+                    };
 
-                    entity.Name = request.Name;
-                    entity.IsAvailable = request.IsAvailable;
-                    entity.ManufacturePhone = request.ManufacturePhone;
-
-                    _productService.Update(entity);
+                    _productService.Update(product);
                     return null;
                 }
                 catch (Exception ex)

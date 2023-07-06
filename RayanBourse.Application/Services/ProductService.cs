@@ -1,4 +1,5 @@
-﻿using RayanBourse.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using RayanBourse.Application.Interfaces;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Infrastructure;
 using System;
@@ -44,12 +45,54 @@ namespace RayanBourse.Application.Services
 
         public void Save(Product entity)
         {
+            Validate(entity, EntityState.Added);
             _unitOfWork.ProductRepository.Save(entity);
         }
 
         public void Update(Product entity)
         {
-            _unitOfWork.ProductRepository.Update(entity);
+            try
+            {
+                Validate( entity, EntityState.Modified);
+                _unitOfWork.ProductRepository.Update(entity);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        private void Validate( Product product, EntityState state)
+        {
+            try
+            {
+                var entity = _unitOfWork.ProductRepository
+                    .Find(x => x.ProduceDate == product.ProduceDate && x.ManufactureEmail.Trim() == product.ManufactureEmail)
+                  .FirstOrDefault();
+                switch (state)
+                {
+
+                    case EntityState.Modified:
+                        if (entity == null)
+                            throw new Exception("Inserted product does not excist in database");
+
+                        if (entity.UserId.Trim()!=product.UserId)
+                            throw new Exception("modifing product  allow just by user creation itself");
+
+
+                        break;
+                    case EntityState.Added:
+                        if (entity != null)
+                            throw new Exception("product is existed in database");
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

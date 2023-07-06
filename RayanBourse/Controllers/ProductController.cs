@@ -89,5 +89,62 @@ namespace RayanBourse.Controllers
 
             return Ok();
         }
+
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit([FromBody] ProductModel model)
+        {
+            var userId = HttpContext.User.FindFirstValue("UserId");
+
+            try
+            {
+                await _mediator.Send(new UpdateProductCommand()
+                {
+                    Name = model.Name,
+                    ManufactureEmail = model.ManufactureEmail,
+                    ProduceDate = model.ProduceDate,
+                    ManufacturePhone = model.ManufacturePhone,
+                    IsAvailable = model.IsAvailable,
+                    UserId = userId
+                });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+
+
+
+
+            return Ok();
+        }
+
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("Delete/{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+
+
+
+
+            return Ok();
+        }
     }
 }

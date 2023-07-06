@@ -30,6 +30,7 @@ namespace RayanBourse.Domain.Entities
         [Key]
         [Column(Order = 1)]
         [MaxLength(100)]
+        [DataType(DataType.EmailAddress)]
         public string ManufactureEmail { get; set; }
 
 
