@@ -22,7 +22,7 @@ namespace RayanBourse.Controllers
 
         [HttpPost]
         [Route("GetAll")]
-        public async Task<IActionResult> GetAll(string manufactorEmail)
+        public async Task<IActionResult> GetAll()
         {
             var productModelList=new List<ProductModel>();
             var products = await _mediator.Send(new GetAllProductQuery());

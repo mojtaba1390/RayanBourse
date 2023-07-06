@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RayanBourse.Application;
 using RayanBourse.Application.Interfaces;
 using RayanBourse.Application.Services;
 using RayanBourse.Domain.Context;
@@ -12,6 +13,7 @@ using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApplication();
 
 builder.Services.AddControllers();
 
@@ -48,22 +50,22 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
 //be sure that tables and database is created
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
-    dbContext.Database.EnsureDeleted();
-    dbContext.Database.EnsureCreated();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
+//    dbContext.Database.EnsureDeleted();
+//    dbContext.Database.EnsureCreated();
+//}
 
 
 app.UseRouting();

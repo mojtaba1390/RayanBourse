@@ -1,8 +1,13 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RayanBourse.Application.Features.Authenticate.Commands;
+using RayanBourse.Application.Features.Authenticate.Queries;
+using RayanBourse.Application.Features.Product.Queries;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,14 +20,11 @@ namespace RayanBourse.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userService;
+        private readonly IMediator _mediator;
 
-        private readonly IConfiguration _configuration;
-
-        public AuthenticateController(IConfiguration configuration, UserManager<ApplicationUser> userService)
+        public AuthenticateController(IMediator mediator)
         {
-            _configuration = configuration;
-            _userService = userService;
+            _mediator = mediator;
         }
 
 
@@ -30,20 +32,16 @@ namespace RayanBourse.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserModel model)
         {
-            var userExists = await _userService.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status403Forbidden,  "User already exists!" );
-
-            ApplicationUser user = new ApplicationUser()
+            try
             {
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
-            var result = await _userService.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status400BadRequest,  string.Join(',',result.Errors.Select(x=>x.Description) ) );
+                 await _mediator.Send(new RegisterCommand() { Username=model.Username,Password=model.Password });
+                return Ok();
 
-            return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
         }
 
 
@@ -56,32 +54,22 @@ namespace RayanBourse.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserModel model)
         {
-            var user = await _userService.FindByNameAsync(model.Username);
-            if (user != null && await _userService.CheckPasswordAsync(user, model.Password))
+            try
             {
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
+                var token = await _mediator.Send(new LoginQuery() { Username = model.Username, Password = model.Password });
 
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
                 });
+
             }
-            return Unauthorized();
+            catch (Exception ex)
+            {
+
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
         }
     }
 }
