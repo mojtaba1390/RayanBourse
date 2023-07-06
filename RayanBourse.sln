@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse.Infrastructure"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayanBourse.Domain", "RayanBourse.Domain\RayanBourse.Domain.csproj", "{FB76B0C0-D869-4545-A382-54780025EE02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayanBourse.Tests", "RayanBourse.Tests\RayanBourse.Tests.csproj", "{81CA6186-727D-4C13-879B-89C92F8C66A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayanBourse.Tests", "RayanBourse.Tests\RayanBourse.Tests.csproj", "{7162CB11-1538-4F51-A762-1CEDE85A1666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{FB76B0C0-D869-4545-A382-54780025EE02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB76B0C0-D869-4545-A382-54780025EE02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB76B0C0-D869-4545-A382-54780025EE02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81CA6186-727D-4C13-879B-89C92F8C66A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7162CB11-1538-4F51-A762-1CEDE85A1666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7162CB11-1538-4F51-A762-1CEDE85A1666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7162CB11-1538-4F51-A762-1CEDE85A1666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7162CB11-1538-4F51-A762-1CEDE85A1666}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

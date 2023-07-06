@@ -15,6 +15,7 @@ namespace RayanBourse.Infrastructure
         void Delete(TEntity entity);
         void Update(TEntity entity);
 
+        public List<TEntity> FindWithIncludes(Expression<Func<TEntity, bool>> predicate, string[] includes);
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RayanBourse.Application.Interfaces;
+using RayanBourse.Domain;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Infrastructure;
 using System;
@@ -22,7 +23,10 @@ namespace RayanBourse.Application.Services
 
         public void Delete(Product entity)
         {
-            _unitOfWork.ProductRepository.Delete(entity);
+            Product? product = GetEntityByManufactorEmailAndProductData(entity);
+
+            Validate(product,null, EntityState.Deleted);
+            _unitOfWork.ProductRepository.Delete(product);
 
         }
 
@@ -45,7 +49,9 @@ namespace RayanBourse.Application.Services
 
         public void Save(Product entity)
         {
-            Validate(entity, EntityState.Added);
+            Product? product = GetEntityByManufactorEmailAndProductData(entity);
+
+            Validate(databaseProduct: product,newProduct:entity, EntityState.Added);
             _unitOfWork.ProductRepository.Save(entity);
         }
 
@@ -53,7 +59,9 @@ namespace RayanBourse.Application.Services
         {
             try
             {
-                Validate( entity, EntityState.Modified);
+                Product? product = GetEntityByManufactorEmailAndProductData(entity);
+
+                Validate(databaseProduct: product, newProduct: entity, EntityState.Modified);
                 _unitOfWork.ProductRepository.Update(entity);
             }
             catch (Exception ex)
@@ -63,28 +71,41 @@ namespace RayanBourse.Application.Services
             }
         }
 
-        private void Validate( Product product, EntityState state)
+        private void Validate( Product databaseProduct,Product newProduct, EntityState state)
         {
             try
             {
-                var entity = _unitOfWork.ProductRepository
-                    .Find(x => x.ProduceDate == product.ProduceDate && x.ManufactureEmail.Trim() == product.ManufactureEmail)
-                  .FirstOrDefault();
                 switch (state)
                 {
 
                     case EntityState.Modified:
-                        if (entity == null)
-                            throw new Exception("Inserted product does not excist in database");
+                        if (databaseProduct == null)
+                            throw new Exception("Inserted product does not exist in database");
 
-                        if (entity.UserId.Trim()!=product.UserId)
+                        if (databaseProduct.UserId.Trim() != newProduct.UserId)
                             throw new Exception("modifing product  allow just by user creation itself");
+
+                        if (!Helper.IsValidMobileNumber(newProduct.ManufacturePhone))
+                            throw new Exception("phone number is invalid!");
 
 
                         break;
                     case EntityState.Added:
-                        if (entity != null)
+                        if (databaseProduct != null)
                             throw new Exception("product is existed in database");
+
+                        if (!Helper.IsValidEmail(newProduct.ManufactureEmail))
+                            throw new Exception("email format is invalid!");
+
+                        if (!Helper.IsValidMobileNumber(newProduct.ManufacturePhone))
+                            throw new Exception("phone number is invalid!");
+                        break;
+                    case EntityState.Deleted:
+                        if (databaseProduct == null)
+                            throw new Exception("expected product does not exist in database");
+
+                        if (databaseProduct.IsAvailable != EnumYesNo.Yes)
+                            throw new Exception("expected product is not available");
 
                         break;
                 }
@@ -93,6 +114,17 @@ namespace RayanBourse.Application.Services
             {
                 throw ex;
             }
+        }
+
+        private Product? GetEntityByManufactorEmailAndProductData(Product product)
+        {
+            return FindWithIncludes(x => x.ProduceDate == product.ProduceDate && x.ManufactureEmail.Trim() == product.ManufactureEmail, new[] { "User" } )
+              .FirstOrDefault();
+        }
+
+        public List<Product> FindWithIncludes(Expression<Func<Product, bool>> predicate, string[] includes)
+        {
+            return _unitOfWork.ProductRepository.FindWithIncludes(predicate, includes);
         }
     }
 }

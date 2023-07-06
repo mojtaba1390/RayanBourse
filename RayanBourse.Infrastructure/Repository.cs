@@ -25,7 +25,7 @@ namespace RayanBourse.Infrastructure
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _dbContext.Set<TEntity>().Where(predicate);
+            return _dbContext.Set<TEntity>().Where(predicate).AsNoTracking();
         }
 
 
@@ -72,11 +72,22 @@ namespace RayanBourse.Infrastructure
 
         public TEntity Get(int id,string[] includes=null)
         {
-            IQueryable<TEntity> entityQuery = _dbContext.Set<TEntity>().Where(x=>id==id);
+            IQueryable<TEntity> entityQuery = _dbContext.Set<TEntity>().Where(x=>id==id).AsNoTracking();
             return entityQuery.FirstOrDefault();
 
         }
 
+        public List<TEntity> FindWithIncludes(Expression<Func<TEntity, bool>> predicate, string[] includes)
+        {
 
+            IQueryable<TEntity> entityQuery = _dbContext.Set<TEntity>().Where(predicate);
+
+            foreach (var include in includes)
+            {
+                entityQuery = entityQuery.Include(include);
+            }
+
+            return entityQuery.ToList();
+        }
     }
 }

@@ -128,11 +128,19 @@ namespace RayanBourse.Controllers
 
         [HttpPost]
         [Authorize]
-        [Route("Delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [Route("Delete")]
+        public async Task<IActionResult> Delete([FromBody] ProductModel model)
         {
+            var userId = HttpContext.User.FindFirstValue("UserId");
+
             try
             {
+                await _mediator.Send(new DeleteProductCommand()
+                {
+                    ManufactureEmail = model.ManufactureEmail,
+                    ProduceDate = model.ProduceDate,
+                    UserId = userId
+                });
                 return Ok();
             }
             catch (Exception ex)
@@ -140,9 +148,6 @@ namespace RayanBourse.Controllers
 
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
-
-
-
 
             return Ok();
         }
