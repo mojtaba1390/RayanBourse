@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RayanBourse.Application;
-
+using RayanBourse.Application.Common;
 using RayanBourse.Domain.Context;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Infrastructure;
@@ -43,9 +43,9 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidAudience = builder.Configuration.GetValue<string>("JWT:ValidAudience"),
-        ValidIssuer = builder.Configuration.GetValue<string>("JWT:ValidIssuer"),
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JWT:Secret")))
+        ValidAudience = JWTSettings.Audiance,
+        ValidIssuer = JWTSettings.Issuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWTSettings.Secret))
     };
 });
 
@@ -92,9 +92,8 @@ app.UseEndpoints(endpoints =>
 
 
 app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint(
-"v1/swagger.json", "V1"
-    ));
+app.UseSwaggerUI(c =>
+c.SwaggerEndpoint("v1/swagger.json", "V1"));
 
 app.Run();
 

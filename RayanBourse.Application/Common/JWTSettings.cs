@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RayanBourse.Application.Common
 {
-    internal static class JWTSettings
+    public static class JWTSettings
     {
         public const string SectionName = "JwtSettings";
         public static string Secret { get;  } = "ThisIsTheRayanBourseSecret";
