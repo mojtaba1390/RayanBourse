@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RayanBourse.Application.Interfaces;
+using RayanBourse.Infrastructure;
 
 namespace RayanBourse.Application.Features.Product.Commands
 {
@@ -7,11 +7,11 @@ namespace RayanBourse.Application.Features.Product.Commands
     {
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Domain.Entities.Product>
         {
-            private readonly IProductService _productService;
+            private IUnitOfWork _unitOfWork;
 
-            public UpdateProductCommandHandler(IProductService productService)
+            public UpdateProductCommandHandler(IUnitOfWork unitOfWork)
             {
-                _productService = productService;
+                _unitOfWork = unitOfWork;
             }
             public async Task<Domain.Entities.Product> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
@@ -29,7 +29,10 @@ namespace RayanBourse.Application.Features.Product.Commands
 
                     };
 
-                    _productService.Update(product);
+                    Validate(product);
+
+                      _unitOfWork.ProductRepository.Update(product);
+
                     return null;
                 }
                 catch (Exception ex)
@@ -39,6 +42,38 @@ namespace RayanBourse.Application.Features.Product.Commands
                 }
 
 
+            }
+
+            private void Validate(Domain.Entities.Product product)
+            {
+                try
+                {
+                    var databaseEntity = GetEntityByManufactorEmailAndProductData(product);
+
+                    if (databaseEntity == null)
+                        throw new Exception("Inserted product does not exist in database");
+
+                    if (databaseEntity.UserId.Trim() != product.UserId)
+                        throw new Exception("modifing product  allow just by user creation itself");
+
+                    if (!Helper.IsValidMobileNumber(product.ManufacturePhone))
+                        throw new Exception("phone number is invalid!");
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+
+            }
+
+
+
+            private Domain.Entities.Product? GetEntityByManufactorEmailAndProductData(Domain.Entities.Product product)
+            {
+                var res = _unitOfWork.ProductRepository.FindWithIncludes(x => x.ProduceDate == product.ProduceDate && x.ManufactureEmail.Trim() == product.ManufactureEmail, new[] { "User" });
+                if (res != null) return res.FirstOrDefault();
+                return null;
             }
         }
     }

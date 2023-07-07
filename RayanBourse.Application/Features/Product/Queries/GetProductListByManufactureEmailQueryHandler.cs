@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RayanBourse.Application.Interfaces;
+using RayanBourse.Infrastructure;
 
 namespace RayanBourse.Application.Features.Product.Queries
 {
@@ -7,16 +7,16 @@ namespace RayanBourse.Application.Features.Product.Queries
     {
         public class GetProductListByManufactureEmailQueryHandler : IRequestHandler<GetProductListByManufactureEmailQuery, List<Domain.Entities.Product>>
         {
-            private readonly IProductService _productService;
+            private IUnitOfWork _unitOfWork;
 
-            public GetProductListByManufactureEmailQueryHandler(IProductService productService)
+            public GetProductListByManufactureEmailQueryHandler(IUnitOfWork unitOfWork)
             {
-                _productService = productService;
+                _unitOfWork = unitOfWork;
             }
 
             public async Task<List<Domain.Entities.Product>> Handle(GetProductListByManufactureEmailQuery query, CancellationToken cancellationToken)
             {
-                return _productService.Find(x => x.ManufactureEmail == query.Name).ToList();
+                return _unitOfWork.ProductRepository.Find(x => x.ManufactureEmail == query.Name).ToList();
             }
         }
 

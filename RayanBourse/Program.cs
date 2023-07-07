@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RayanBourse.Application;
-using RayanBourse.Application.Interfaces;
-using RayanBourse.Application.Services;
+
 using RayanBourse.Domain.Context;
 using RayanBourse.Domain.Entities;
 using RayanBourse.Infrastructure;
+using RayanBourse.Infrastructure.Interfaces;
+using RayanBourse.Infrastructure.Repositories;
 using RayanBourse.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
@@ -62,7 +63,7 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 
