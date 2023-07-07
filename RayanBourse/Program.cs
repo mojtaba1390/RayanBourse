@@ -72,12 +72,12 @@ builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 
 //be sure that tables and database is created
-//using (var scope = app.Services.CreateScope())
-//{
-//    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
-//    dbContext.Database.EnsureDeleted();
-//    dbContext.Database.EnsureCreated();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
+    dbContext.Database.EnsureDeleted();
+    dbContext.Database.EnsureCreated();
+}
 
 
 app.UseRouting();
