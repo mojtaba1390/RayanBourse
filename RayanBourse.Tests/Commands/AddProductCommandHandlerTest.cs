@@ -14,7 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using static RayanBourse.Application.Features.Product.Commands.AddProductCommand;
 
 namespace RayanBourse.Tests.Commands
 {
