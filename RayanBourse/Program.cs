@@ -51,16 +51,16 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(option =>
-{
-    option.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-    option.OperationFilter<SecurityRequirementsOperationFilter>();
-});
+//builder.Services.AddSwaggerGen(option =>
+//{
+//    option.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+//    {
+//        In = ParameterLocation.Header,
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.ApiKey
+//    });
+//    option.OperationFilter<SecurityRequirementsOperationFilter>();
+//});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -72,12 +72,12 @@ builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 
 //be sure that tables and database is created
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
-    dbContext.Database.EnsureDeleted();
-    dbContext.Database.EnsureCreated();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
+//    dbContext.Database.EnsureDeleted();
+//    dbContext.Database.EnsureCreated();
+//}
 
 
 app.UseRouting();
@@ -91,9 +91,9 @@ app.UseEndpoints(endpoints =>
 });
 
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-c.SwaggerEndpoint("v1/swagger.json", "V1"));
+//app.UseSwagger();
+//app.UseSwaggerUI(c =>
+//c.SwaggerEndpoint("v1/swagger.json", "V1"));
 
 app.Run();
 
