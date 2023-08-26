@@ -6,11 +6,8 @@ using Microsoft.OpenApi.Models;
 using RayanBourse.Application;
 using RayanBourse.Application.Common;
 using RayanBourse.Domain.Context;
-using RayanBourse.Domain.Entities;
 using RayanBourse.Infrastructure;
-using RayanBourse.Infrastructure.Interfaces;
-using RayanBourse.Infrastructure.Repositories;
-using RayanBourse.Models;
+
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
@@ -24,10 +21,7 @@ builder.Services.AddControllers();
 var connectionString = builder.Configuration.GetConnectionString("RayanBourseConnection");
 builder.Services.AddDbContext<RayanBourseContext>(x => x.UseSqlServer(connectionString));
 
-// For Identity  
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<RayanBourseContext>()
-    .AddDefaultTokenProviders();
+
 
 // Adding Authentication  
 builder.Services.AddAuthentication(options =>
@@ -63,7 +57,6 @@ builder.Services.AddEndpointsApiExplorer();
 //});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
 
@@ -71,13 +64,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
-//be sure that tables and database is created
-//using (var scope = app.Services.CreateScope())
-//{
-//    var dbContext = scope.ServiceProvider.GetRequiredService<RayanBourseContext>();
-//    dbContext.Database.EnsureDeleted();
-//    dbContext.Database.EnsureCreated();
-//}
+
 
 
 app.UseRouting();
